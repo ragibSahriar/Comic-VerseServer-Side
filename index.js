@@ -30,6 +30,9 @@ async function run() {
 // ///////////////////
 
     const usersCollection = client.db("musicCloud").collection("users");
+    const classesCollection = client.db("musicCloud").collection("classes");
+
+
     // users related api
     app.post('/jwt',(req,res)=>{
       const user = req.body;
@@ -67,6 +70,36 @@ async function run() {
       res.send(result);
     })
 
+    app.get("/role", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
+
+    // add class 
+    app.get("/addClass", async (req, res) => {
+      try {
+        const result = await classesCollection.find().toArray();
+        res.send(result);
+      } catch (error) {
+        console.error("Error retrieving new classes:", error);
+        res.status(500).send("Error retrieving new classes");
+      }
+    });
+
+    // Create a new class
+    app.post("/addClass", async (req, res) => {
+      const newClass = req.body;
+      try {
+        const result = await classesCollection.insertOne(newClass);
+        res.send(result);
+      } catch (error) {
+        console.error("Error creating new class:", error);
+        res.status(500).send("Error creating new class");
+      }
+    });
+
     app.patch('/users/admin/:id', async (req, res) => {
       const id = req.params.id;
       console.log(id);
@@ -93,7 +126,7 @@ async function run() {
     })
 
     app.get('/users/role/:email', async (req,res)=>{
-      
+
     })
 
     app.patch('/users/instructor/:id', async (req, res) => {
@@ -109,7 +142,7 @@ async function run() {
       res.send(result);
     })
 
-        app.delete('/menu/:id', verifyJWT, verifyAdmin, async (req, res) => {
+        app.delete('/menu/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const result = await menuCollection.deleteOne(query);
