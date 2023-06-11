@@ -42,6 +42,13 @@ async function run() {
       res.send(token);
     })
 
+    app.get("/classes", async (req, res) => {
+      const result = await classesCollection.find().toArray();
+      res.send(result);
+    }); 
+
+
+
 
     app.get("/users", async (req, res) => {
       const result = await usersCollection.find().toArray();
@@ -74,6 +81,7 @@ async function run() {
       const email = req.query.email;
       const query = { email: email };
       const result = await usersCollection.findOne(query);
+      console.log(result);
       res.send(result);
     });
 
@@ -88,6 +96,52 @@ async function run() {
       }
     });
 
+    app.get("/addClass", async (req, res) => {
+      try {
+        // Assuming you have an authentication system that verifies the user's email
+        const userEmail = req.query.email;
+        if (isValidEmail(userEmail)) {
+          const result = await classesCollection.find().toArray();
+          res.send(result);
+        } else {
+          res.status(403).send("Unauthorized access");
+        }
+      } catch (error) {
+        console.error("Error retrieving new classes:", error);
+        res.status(500).send("Error retrieving new classes");
+      }
+    });
+    
+
+    app.post("/addClass/feedback/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const feedback = req.body.feedback;
+      const updateDoc = {
+        $set: {
+          feedback: feedback,
+        },
+      };
+      try {
+        const result = await classesCollection.updateOne(filter, updateDoc);
+        res.send(result);
+      } catch (error) {
+        console.error("Error sending feedback:", error);
+        res.status(500).send("Error sending feedback");
+      }
+    });
+
+    // my class 
+    app.get("/addClass/myclass/:email", async (req, res) => {
+      console.log(req.params.email);
+      const result = await classesCollection
+        .find({
+          email: req.params.email,
+        })
+        .toArray();
+      res.send(result);
+    });
+
     // Create a new class
     app.post("/addClass", async (req, res) => {
       const newClass = req.body;
@@ -99,6 +153,31 @@ async function run() {
         res.status(500).send("Error creating new class");
       }
     });
+// approvedClasses
+    app.patch('/addClass/approved/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          status: '🟢Approved'
+        },
+      };
+      const result = await classesCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    })
+    app.patch('/addClass/deny/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          status: '🔴Denied'
+        },
+      };
+      const result = await classesCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    })
 
     app.patch('/users/admin/:id', async (req, res) => {
       const id = req.params.id;
@@ -112,6 +191,7 @@ async function run() {
       const result = await usersCollection.updateOne(filter, updateDoc);
       res.send(result);
     })
+
     app.patch('/users/instructor/:id', async (req, res) => {
       const id = req.params.id;
       console.log(id);
@@ -142,12 +222,12 @@ async function run() {
       res.send(result);
     })
 
-        app.delete('/menu/:id', async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) }
-      const result = await menuCollection.deleteOne(query);
-      res.send(result);
-    })
+    //     app.delete('/menu/:id', async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = { _id: new ObjectId(id) }
+    //   const result = await menuCollection.deleteOne(query);
+    //   res.send(result);
+    // })
 
 // /////////////////////////////////////
     await client.db("admin").command({ ping: 1 });
