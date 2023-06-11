@@ -31,18 +31,45 @@ async function run() {
 
     const usersCollection = client.db("musicCloud").collection("users");
     const classesCollection = client.db("musicCloud").collection("classes");
+    const classesCartCollection = client.db("musicCloud").collection("carts");
 
 
     // users related api
-    app.post('/jwt',(req,res)=>{
-      const user = req.body;
-      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,{
-        expiresIn: '1h'
-      })
-      res.send(token);
-    })
+    // get student cart collection
+
+// app.get("/classCarts",  async (req, res) => {
+//   const email = req.query.email;
+
+//   if (!email) {
+//     res.send([]);
+//   }
+//   const query = { email: email };
+//   const result = await classesCartCollection.find(query).toArray();
+//   res.send(result);
+// });
+// // Delete  classes from the cart
+// app.delete("/classesCarts/:id", async (req, res) => {
+//   const id = req.params.id;
+//   const query = { _id: new ObjectId(id) };
+//   const result = await classesCartCollection.deleteOne(query);
+//   res.send(result);
+// });
+    
+    // app.post('/jwt',(req,res)=>{
+    //   const user = req.body;
+    //   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,{
+    //     expiresIn: '1h'
+    //   })
+    //   res.send(token);
+    // })
 
     app.get("/classes", async (req, res) => {
+      const result = await classesCollection.find().toArray();
+      res.send(result);
+    }); 
+
+// classescart student 
+    app.get("/classCarts", async (req, res) => {
       const result = await classesCollection.find().toArray();
       res.send(result);
     }); 
@@ -77,11 +104,19 @@ async function run() {
       res.send(result);
     })
 
+    // app.get("/role", async (req, res) => {
+    //   const email = req.query.email;
+    //   const query = { email: email };
+    //   const result = await usersCollection.findOne(query);
+    //   console.log(result);
+    //   res.send(result);
+    // });
+
     app.get("/role", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
       const result = await usersCollection.findOne(query);
-      console.log(result);
+      console.log(result, query);
       res.send(result);
     });
 
