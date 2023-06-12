@@ -45,8 +45,7 @@ async function run() {
     const classesCartCollection = client.db("musicCloud").collection("carts");
 
 
-    // users related api
-    // get student cart collection
+   
 
 app.post("/classCarts",  async (req, res) => {
   const email = req.query.email;
