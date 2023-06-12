@@ -29,6 +29,10 @@ async function run() {
     await client.connect();
 // ///////////////////
 
+
+    // Close the MongoDB connection
+
+
     const usersCollection = client.db("musicCloud").collection("users");
     const classesCollection = client.db("musicCloud").collection("classes");
     const classesCartCollection = client.db("musicCloud").collection("carts");
@@ -37,23 +41,23 @@ async function run() {
     // users related api
     // get student cart collection
 
-// app.get("/classCarts",  async (req, res) => {
-//   const email = req.query.email;
+app.get("/classCarts",  async (req, res) => {
+  const email = req.query.email;
 
-//   if (!email) {
-//     res.send([]);
-//   }
-//   const query = { email: email };
-//   const result = await classesCartCollection.find(query).toArray();
-//   res.send(result);
-// });
-// // Delete  classes from the cart
-// app.delete("/classesCarts/:id", async (req, res) => {
-//   const id = req.params.id;
-//   const query = { _id: new ObjectId(id) };
-//   const result = await classesCartCollection.deleteOne(query);
-//   res.send(result);
-// });
+  if (!email) {
+    res.send([]);
+  }
+  const query = { email: email };
+  const result = await classesCartCollection.find(query).toArray();
+  res.send(result);
+});
+// Delete  classes from the cart
+app.delete("/classesCarts/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) };
+  const result = await classesCartCollection.deleteOne(query);
+  res.send(result);
+});
     
     // app.post('/jwt',(req,res)=>{
     //   const user = req.body;
@@ -64,12 +68,17 @@ async function run() {
     // })
 
     app.get("/classes", async (req, res) => {
-      const result = await classesCollection.find().toArray();
+      const query = {};
+      const options = {
+        sort: {"seats": -1}
+      }
+      const result = await classesCollection.find(query,options).toArray();
       res.send(result);
     }); 
 
 // classescart student 
     app.get("/classCarts", async (req, res) => {
+
       const result = await classesCollection.find().toArray();
       res.send(result);
     }); 
