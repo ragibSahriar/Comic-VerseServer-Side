@@ -21,7 +21,7 @@ var uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@ac-xz6dl9
 
 
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -37,7 +37,7 @@ async function run() {
 // ///////////////////
 
 
-    // Close the MongoDB connection
+    
 
 
     const usersCollection = client.db("musicCloud").collection("users");
