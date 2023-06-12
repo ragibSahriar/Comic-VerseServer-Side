@@ -18,11 +18,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 
 var uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@ac-xz6dl92-shard-00-00.0p8zqx2.mongodb.net:27017,ac-xz6dl92-shard-00-01.0p8zqx2.mongodb.net:27017,ac-xz6dl92-shard-00-02.0p8zqx2.mongodb.net:27017/?ssl=true&replicaSet=atlas-sgutn8-shard-0&authSource=admin&retryWrites=true&w=majority`;
-// MongoClient.connect(uri, function(err, client) {
-//   const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  // client.close();
-// });
+
 
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
