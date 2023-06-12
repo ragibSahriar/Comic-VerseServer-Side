@@ -13,8 +13,7 @@ app.use(express.json());
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.0p8zqx2.mongodb.net/?retryWrites=true&w=majority`;
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.0p8zqx2.mongodb.net/?retryWrites=true&w=majority`;
-// add 
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.0p8zqx2.mongodb.net/?retryWrites=true&w=majority`
 
 // var MongoClient = require('mongodb').MongoClient;
 
